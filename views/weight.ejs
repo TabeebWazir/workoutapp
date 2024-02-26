@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en US">
+<head>
+    <title>Workout Planner</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo">WorkoutApp</h1>
+        <a href="/planner"><button class="planner active">Workout Planner</button></a>
+        <a href="/progress"><button class="progress">Progress</button></a>
+        <a href="/workouts"><button class="workouts">Workouts</button></a>
+        <a href="/profile"><button class="profile">Profile</button></a>
+    </header>
+    <div class="main">
+        <div>
+            <canvas id="weightChart"></canvas>
+        </div>
+        <h2 class="entry-heading">Weight/Date</h2>
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+        <form action="/weight" method="post">
+            <label for="weight" class="label">Weight (in lbs):</label>
+            <input type="number" id="weight" name="weight" step="0.01" required class="input">
+            <label for="entryDate" class="label">Date:</label>
+            <input type="date" id="entryDate" name="entryDate" required class="input">
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+
+    <!--javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        //charts----------------------------------------------------------
+        const data = [
+        { year: 2010, count: 10 },
+        { year: 2011, count: 20 },
+        { year: 2012, count: 15 },
+        { year: 2013, count: 25 },
+        { year: 2014, count: 22 },
+        { year: 2015, count: 30 },
+        { year: 2016, count: 28 },
+        ];
+        new Chart(
+        document.getElementById('weightChart'),
+        {
+            type: 'line',
+            data: {
+            labels: data.map(row => row.year),
+            datasets: [
+                {
+                label: 'Acquisitions by year',
+                data: data.map(row => row.count)
+                }
+            ]
+            }
+        }
+        );
+    </script>
+</body>
+</html>

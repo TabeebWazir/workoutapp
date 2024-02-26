@@ -1,0 +1,443 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.header{
+   background-color: lightblue;
+   height: 60px;
+   display: flex;
+   flex-direction: row;
+   position: relative;
+   align-items: center;
+   justify-content: right;
+   top: 0;
+   position: sticky;
+   margin-bottom: 25px;
+}
+
+.header button{
+    margin-right: 25px;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.home, .planner, .progress, .workouts {
+    background-color: lightblue;
+}
+
+.home:hover, .planner:hover, .progress:hover, .workouts:hover {
+    background-color: lightcoral;
+    color: white;
+}
+
+.header h1{
+    margin: 10px;
+    padding: 4px;
+    margin-right: auto; 
+    font-size: 24px; 
+    color: #333; 
+}
+
+table, th, td {
+    border: 1px solid;
+    padding: 5px;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: auto;
+}
+
+hr {
+    width: 50%;
+    margin: 20px auto;
+}
+
+tr:nth-child(even){background-color: #cccccc;}
+tr:nth-child(odd){background-color: #f0f0f0;}
+
+.profile {
+    background-color: darkslateblue;
+    color:white;
+}
+
+.profile:hover {
+    background-color: lightyellow;
+    color: black;
+}
+
+.active{
+    color: white;
+    background-color: lightcoral;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*height: 100vh;*/
+    margin: 0;
+}
+
+/* Style the h1 elements inside the "main" container */
+.main h1 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+/* Style the buttons inside the "main" container */
+.main button {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+/* Style the "Logout" button differently */
+.main .logout {
+    background-color: #dc3545;
+}
+
+/* Style the "Logout" button on hover */
+.main .logout:hover {
+    background-color: #c82333;
+}
+
+
+
+/* Center text within buttons */
+.main button, .main a button {
+    text-align: center;
+}
+
+
+.entry-heading {
+    margin-top: 20px;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.error {
+    color: red;
+    margin: 10px 0;
+}
+
+.label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submit-button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+main, .submit-button:hover {
+    background-color: #555;
+}
+
+   /* Style the list container */
+   .exercise-list-container {
+    max-height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+/* Style each list item to be displayed in a row */
+.exercise-list-container ul li {
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 5px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-between; /* Space between the buttons and exercise details */
+}
+
+/* Style the buttons */
+.exercise-list-container ul li .action-buttons button {
+    margin-left: 10px;
+}
+
+/* Add media queries for different screen sizes */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
+    .exercise-list-container {
+        max-height: 50vh; /* Adjust the max-height for smaller screens */
+    }
+}
+
+.eform{
+    background-color: lightblue;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    margin-bottom: 100px;
+    padding: 10px;
+    
+}
+
+.eform > .label {
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.eform > .input {
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+
+
+
+/* Style the overlay background */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    z-index: 999;
+    overflow: auto;
+}
+
+
+.countdown-container{
+    background: #fff; /* White background for the content */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Style the pop-up content */
+.popup-content {
+    background: #fff; /* White background for the content */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Style the heading */
+.popup-content h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Style the labels and input fields */
+.popup-content label {
+    display: block;
+    margin-top: 10px;
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style the buttons */
+.popup-content button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Blue color for the buttons */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style the close button */
+.popup-content .closeButton {
+    background-color: #dc3545; /* Red color for the close button */
+}
+
+.popup-content .closeButton:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+
+.start-edit-delete-buttons-box{
+    /* background-color: lightblue; */
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    align-items: center;
+ }
+
+#delete-button {
+    background-color: #dc3545; 
+}
+
+#delete-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.closeCountdownButton {
+    background-color: #dc3545; 
+}
+
+.closeCountdownButton:hover {
+    background-color: #c82333; 
+}
+
+
+/* Style for the "Edit" button */
+.editButton {
+    background-color: #007BFF; /* Change the background color to blue */
+    color: #FFF; /* Change the text color to white */
+    padding: 5px 10px; /* Add some padding for better appearance */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
+
+/* Hover effect for the "Edit" button */
+.editButton:hover {
+    background-color: #0056b3; /* Change the background color on hover */
+}
+
+
+/* Style for the "Edit" button */
+.startButton {
+    background-color: #9230ee; /* Change the background color to blue */
+    color: #FFF; /* Change the text color to white */
+    padding: 5px 10px; /* Add some padding for better appearance */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
+
+/* Hover effect for the "Edit" button */
+.startButton:hover {
+    background-color: #6f00b9; /* Change the background color on hover */
+}
+
+
+/* Style for the "Edit" button */
+.submit-buttonone {
+    background-color: #007BFF; /* Change the background color to blue */
+    color: #FFF; /* Change the text color to white */
+    padding: 5px 10px; /* Add some padding for better appearance */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
+
+/* Hover effect for the "Edit" button */
+.submit-buttonone:hover {
+    background-color: #0056b3; /* Change the background color on hover */
+}
+
+
+/* Style for the "Edit" button */
+.changepassword {
+    background-color: #007BFF; /* Change the background color to blue */
+    color: #FFF; /* Change the text color to white */
+    padding: 5px 10px; /* Add some padding for better appearance */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
+
+/* Hover effect for the "Edit" button */
+.changepassword:hover {
+    background-color: #0056b3; /* Change the background color on hover */
+}
+
+
+.continueButton{
+    background-color: rgb(0, 157, 157);
+}
+
+.continueButton:hover{
+    background-color: rgb(0, 121, 121);
+}
+
+.stopButton{
+    background-color: rgb(83, 71, 163);
+}
+
+.stopButton:hover {
+    background-color: rgb(58, 49, 114);
+}
+
+.profile-main {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-height: 80vh; /* Set a maximum height relative to the viewport height */
+    background-color: #0aaddf;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+}
+
+.profile-pic {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    border-radius: 50%;
+}
+
+.profile-planner {
+    background-color: darkslateblue;
+    color: white;
+    top: 55%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-height: 80vh; /* Set a maximum height relative to the viewport height */
+    padding: 240px 450px;
+    text-align: center;
+    font-size: 50px;
+}
+
+.profile-planner:hover {
+    background-color: lightyellow;
+    color: black;
+}

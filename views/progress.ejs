@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Progress</title>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo">WorkoutApp</h1>
+        <a  href="/planner"><button class="planner">Workout Planner</button></a>
+        <a  href="/progress"><button class="progress">Progress</button></a>
+        <a href="/workouts"><button class="workouts">Workouts</button></a>
+        <a href="/profile"><button class="profile">Profile</button></a>
+    </header>
+    <div class="main">
+      <div style="width: 30%; display: flex;">
+        <canvas style="text-align: left;" id="weightChart"></canvas>
+        <h3 style="position: relative; text-align: right; white-space: pre;" id="weightCalc"></h3>
+      </div>
+
+      <h1 id="recentTitle"></h1>
+      <h1 id="recentWeight"></h1>
+      <h3 id="recentDuration"></h3>
+      <h3 id="recentCalories"></h3>
+
+      <hr>
+
+      <h1>Workout Progress</h1>
+      <div style="display: flex; gap: 10px;" id="progtable">
+        <table style="text-align: left;" class="table">
+              <tr>
+                  <th>Date</th>
+                  <th>Exercise</th>
+                  <th>Repetitions</th>
+                  <th>Duration</th>
+              </tr>
+              <% if(exercises && Array.isArray(exercises) && exercises.length > 0) { %>
+                  <% exercises.reverse().forEach(function(exercise) { %>
+                      <tr>
+                          <th id="<%=exercise.exerciseDate%>"><%= exercise.formattedExerciseDate %></th>
+                          <th><%= exercise.exerciseType %></th>
+                          <th><%= exercise.repetitions %></th>
+                          <th><%= exercise.durationMinutes %></th>
+                      </tr>
+                  <% }); %>
+                                  <!-- </table> -->
+              <% } else { %>
+                  <h4>No Exercises Found.</h4>
+              <% } %>
+        </table>
+        <table style="text-align: right;" class="weightTable">
+          <tr>
+            <th>Date</th>
+            <th>Weight</th>
+          </tr>
+          <% if(weights && Array.isArray(weights) && weights.length > 0) { %>
+            <% weights.reverse().forEach(function(weight) { %>
+              <tr>
+                <th id="<%=weight.entryDate%>"><%= weight.formattedWeightDate %></th>
+                <th><%= weight.weight %></th>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <h4>No Weights Found.</h4>
+          <% } %>
+        </table>
+        <br>
+      </div>
+    </div>
+
+    <!-- javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      var exercises;
+      try {
+        exercises = JSON.parse('<%- JSON.stringify(exercises) %>');
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+    </script>
+    <script>
+      
+        document.addEventListener('DOMContentLoaded', function () {
+          const table = document.querySelector('.table');
+          const weightTable = document.querySelector('.weightTable');
+          const rows = Array.from(table.querySelectorAll('tr')).slice(1);
+          const wRows = Array.from(weightTable.querySelectorAll('tr')).slice(1);
+          //console.log(rows[0].cells[1]);
+    
+          // Sort the rows by date
+          //console.log(rows)
+          rows.sort(function (a, b) {
+
+            const dateA = new Date(a.cells[0].innerText);
+            const dateB = new Date(b.cells[0].innerText);
+            // console.log("a " + a.cells[0].innerText);
+            // console.log("b " + b.cells[0].innerText);
+            // console.log("dataA: " + dateA);
+            // console.log("dataB: " + dateB);
+            let calc = dateB-dateA;
+            //console.log("calc: " + calc);
+            return dateB - dateA;
+          });
+
+          wRows.sort(function (a, b) {
+
+            const dateA = new Date(a.cells[0].innerText);
+            const dateB = new Date(b.cells[0].innerText);
+
+            let calc = dateB-dateA;
+
+            return dateB - dateA;
+          });
+    
+          // Clear the tables
+          while (table.rows.length > 1) {
+            table.deleteRow(1);
+          }
+
+          while (weightTable.rows.length > 1) {
+            weightTable.deleteRow(1);
+          }
+    
+          // Append the sorted rows back to the tables
+          rows.forEach(function (row) {
+            table.appendChild(row);
+          });
+
+          wRows.forEach(function (wRow) {
+            weightTable.appendChild(wRow);
+          });
+
+          // // Fill in null weight values in table
+          // for(let i = 0; i < rows.length; i++) {
+          //   if(rows[i].cells[4].textContent.trim() === '') {
+          //     for(let j = i; j < rows.length; j++) {
+          //       if(rows[j].cells[4].textContent.trim() !== '') {
+          //         rows[i].cells[4].textContent = rows[j].cells[4].textContent;
+          //         var firstWeight = rows[i].cells[4].textContent;
+          //         break;
+          //       }
+          //     }
+          //   }
+          //   if(i == rows.length - 1 && rows[i].cells[4].textContent.trim() !== '')
+          //     var firstWeight = rows[i].cells[4].textContent;
+          // }
+
+          // Weight Loss Calculation
+          const recentWeight = wRows[0].cells[1].textContent;
+          const firstWeight = wRows.length > 0 ? wRows[wRows.length - 1].cells[1].textContent : 'N/A';
+          const weightLost = (parseInt(firstWeight) - parseInt(recentWeight))
+
+          const weightCalc = document.getElementById("weightCalc");
+          weightCalc.textContent = "\n\n\n\nFirst Weight:\t" + firstWeight + "lbs\nLast Weight:\t" + recentWeight + "lbs\nTotal Lost:\t" + weightLost + " lbs";
+
+          // Fill in recents HTML
+          const title = document.getElementById("recentTitle");
+          title.textContent = "Most Recent Workout: " + rows[0].cells[0].textContent;
+          const rWeight = document.getElementById("recentWeight");
+          rWeight.textContent = "Most Recent Weight: " + recentWeight;
+          const dur = document.getElementById("recentDuration");
+          let totalDur = 0;
+          rows.forEach(function(row) {
+            if(row.cells[0].textContent == rows[0].cells[0].textContent) {
+              totalDur += parseInt(row.cells[3].textContent);
+            }
+          })
+          dur.textContent = "Total Duration: " + totalDur;
+          const cal = document.getElementById("recentCalories");
+
+          
+
+          //charts----------------------------------------------------------
+          //set chart title using userName
+          //console.log(exercises);
+          let userName = exercises[0].name;
+          if(userName.endsWith("s")) {
+            userName += "'";
+          } else {
+            userName += "'s";
+          }
+          userName += " Weight";
+          
+          //populate data that will be going in chart
+          const data = [];
+          for(let i = 0; i < wRows.length; i++) {
+            data[wRows.length - 1 - i] = {workoutsSinceLast: wRows[i].cells[0].innerText, weight: wRows[i].cells[1].innerText}
+          }
+          console.log(data);
+
+          //animation for table
+          const totalDuration = 2000;
+          const delayBetweenPoints = totalDuration / data.length;
+          const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+          const animation = {
+            x: {
+              type: 'number',
+              easing: 'linear',
+              duration: delayBetweenPoints,
+              from: NaN, // the point is initially skipped
+              delay(ctx) {
+                if (ctx.type !== 'data' || ctx.xStarted) {
+                  return 0;
+                }
+                ctx.xStarted = true;
+                return ctx.index * delayBetweenPoints;
+              }
+            },
+            y: {
+              type: 'number',
+              easing: 'linear',
+              duration: delayBetweenPoints,
+              from: previousY,
+              delay(ctx) {
+                if (ctx.type !== 'data' || ctx.yStarted) {
+                  return 0;
+                }
+                ctx.yStarted = true;
+                return ctx.index * delayBetweenPoints;
+              }
+            }
+          };
+
+          new Chart(
+            document.getElementById('weightChart'),
+            {
+              type: 'line',
+              data: {
+                labels: data.map(row => row.workoutsSinceLast),
+                datasets: [
+                  {
+                    label: `${userName}`,
+                    data: data.map(row => row.weight)
+                  }
+                ]
+              },
+              options: {
+                tension: 0.2,
+                animation,
+                scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: "Date",
+                      color: "#000FFF"
+                    }
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: "Weight in Pounds",
+                      color: "#000FFF"
+                    },
+                  }
+                },
+                interaction: {
+                  intersect: false
+                }
+              }
+            }
+          );      
+        });
+      </script>
+      
+</body>
+</html>
+

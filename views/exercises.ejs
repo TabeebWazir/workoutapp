@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en US">
+<head>
+    <title>Workout Planner</title>
+    <link rel="icon" type="image/x-icon" href="../../pubilc_html/favicon.ico">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo">WorkoutApp</h1>
+        <a href="/planner"><button class="planner">Workout Planner</button></a>
+        <a href="/progress"><button class="progress">Progress</button></a>
+        <a href="/workouts"><button class="workouts">Workouts</button></a>
+        <a href="/profile"><button class="profile">Profile</button></a>
+    </header>
+    <div class="main">
+
+        <!-- Display existing exercises from the database -->
+        <h2 class="entry-heading">Existing Exercises</h2>
+        <div class="exercise-list-container"> <!-- Wrap the list in a div with a fixed height -->
+            <ul id="exercise-list"> <!-- Add an id to the list for JavaScript -->
+                <% if (exercises && Array.isArray(exercises) && exercises.length > 0) { %>
+                    <% exercises.reverse().forEach(function(exercise) { %>
+                        <li>
+                            <div>
+                                <strong>Type of Exercise:</strong> <%= exercise.exerciseType %><br>
+                                <strong>Date:</strong> <%= exercise.formattedExerciseDate %><br>
+                                <strong>Duration (minutes):</strong> <%= exercise.durationMinutes %><br>
+                                <strong>Number of Repetitions:</strong> <%= exercise.repetitions %><br>
+                            </div>
+                            <div class="start-edit-delete-buttons-box">
+
+
+                                <!-- <button class="update-button" type="button">Update</button> -->
+                                <form class="popup-content" id="exerciseForm<%= exercise.id %>" action="/update-exercise/<%= exercise.id %>" method="post" style="display: none;">
+                                    <!-- Your form for updating exercises goes here -->
+                                    <label for="exerciseType" class="label">Exercise:</label>
+                                    <input type="text" id="exerciseType" name="exerciseType" required class="input" placeholder="Enter exercise...">
+                                    <!-- The 'value' attribute above should be dynamically populated with the current exercise data. -->
+                                
+                                    <label for="exerciseDate" class="label">Date:</label>
+                                    <input type="date" id="exerciseDate" name="exerciseDate" required class="input" value="Current Exercise Date">
+                                    <!-- Similarly, populate the 'value' attribute with the current exercise date. -->
+                                
+                                    <label for="exerciseDuration" class="label">Duration:</label>
+                                    <input type="number" id="exerciseDuration" name="exerciseDuration" required class="input" placeholder="Enter min..." >
+                                    <!-- Populate 'value' with current exercise duration. -->
+                                
+                                    <label for="exerciseRepetitions" class="label">Repetitions:</label>
+                                    <input type="number" id="exerciseRepetitions" name="exerciseRepetitions" required class="input" placeholder="Enter rep..." >
+                                    <!-- Populate 'value' with current exercise repetitions. -->
+                                
+                                    <button type="submit" id="updateButton">Update</button>
+                                    <button class="closeButton" data-exercise-id="<%= exercise.id %>">Close</button>
+                                </form>
+                                <div class="countdown-container" data-exercise-duration="<%= exercise.durationMinutes %>" style="display: none;">
+                                    <p>Time: <span id="countdown"></span></p>
+                                    <button class="closeCountdownButton">Close</button>
+                                    <button class="stopButton">Stop</button>
+                                    <button class="continueButton">Continue</button>
+                                  </div>
+                                <button class="startButton" data-exercise-id="<%= exercise.id %>"  data-exercise-duration="<%= exercise.durationMinutes %>">Start</button>
+                                <button class="editButton" data-exercise-id="<%= exercise.id %>">Edit</button>
+                                <form action="/delete-exercise/<%= exercise.id %>" method="POST">
+                                    <button type="submit" id="delete-button" class="delete-button">Delete</button>
+                                </form>
+                            </div>
+                            
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <p>No exercises found.</p>
+                <% } %>
+            </ul>
+        </div>
+        
+        <h2 class="entry-heading">Exercise Details</h2>
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+
+        
+          
+    
+        <form class="eform" action="/exercises" method="post">
+            <!-- Your form for adding new exercises goes here -->
+            <label for="exerciseType" class="label">Exercise:</label>
+            <select id="exerciseType" name="exerciseType" required class="input" placeholder="Enter exercise...">
+                <option value="Enter exercise...">Enter exercise...</option>
+                <option value="Russian Twists">Russian Twists</option>
+                <option value="Stairs">Stairs</option>
+                <option value="Walking">Walking</option>
+                <option value="Running">Running</option>
+                <option value="Biking">Biking</option>
+                <option value="Tricep Push">Tricep Push</option>
+                <option value="Pushups">Pushups</option>
+                <option value="Bench Press">Bench Press</option>
+                <option value="Shoulder Press">Shoulder Press</option>
+                <option value="Dumbell Row">Dumbbell Row</option>
+                <option value="Pullups">Pullups</option>
+                <option value="Bicep Curls">Bicep Curls</option>
+                <option value="Dumbbell Raise">Dumbbell Raise</option>
+                <option value="Wrist Curl">Wrist Curl</option>
+                <option value="Back Squat">Back Squat</option>
+                <option value="Front Squat">Front Squat</option>
+                <option value="Leg extension">Leg Extension</option>
+                <option value="Hamstring Curl">Hamstring Curl</option>
+                <option value="Deadlift">Deadlift</option>
+                <option value="Lunges">Lunges</option>
+                <option value="Calf Raises">Calf Raises</option>
+                <option value="Leg Press">Leg Press</option>
+                <option value="Step-Ups">Step-Ups</option>
+                <option value="Box Jumps">Box Jumps</option>
+                <option value="Bulgarian Split Squat">Bulgarian Split Squat</option>
+                
+            </select>
+            <label for="exerciseDate" class="label">Date:</label>
+            <input type="date" id="exerciseDate" name="exerciseDate" required class="input">
+            <label for="exerciseDuration" class="label">Duration:</label>
+            <input type="number" id="exerciseDuration" name="exerciseDuration" required class="input" placeholder="Enter min...">
+            <label for="exerciseRepetitions" class="label">Repetitions:</label>
+            <input type="number" id="exerciseRepetitions" name="exerciseRepetitions" required class="input" placeholder="Enter rep...">
+            <button type="submit" class="submit-buttonone">Add</button>
+        </form>
+    </div>
+
+    <script>
+
+        // Get references to the "Close" buttons and the exercise forms
+        const closeButtons = document.querySelectorAll(".closeButton");
+        const editButtons = document.querySelectorAll(".editButton");
+        const closeCountdownButtons = document.querySelectorAll(".closeCountdownButton");
+    
+        // Add a click event listener to each "Edit" button
+        editButtons.forEach(editButton => {
+            editButton.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the default form submission (if any)
+                const exerciseId = this.getAttribute("data-exercise-id");
+                const exerciseForm = document.getElementById("exerciseForm" + exerciseId);
+                exerciseForm.style.display = "block"; // Show the corresponding form
+            });
+        });
+    
+        // Add a click event listener to each "Close" button
+        closeButtons.forEach(closeButton => {
+            closeButton.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the default form submission (if any)
+                const exerciseId = this.getAttribute("data-exercise-id");
+                const exerciseForm = document.getElementById("exerciseForm" + exerciseId);
+                exerciseForm.style.display = "none"; // Hide the corresponding form
+            });
+        });
+
+
+
+  let countdownInterval;
+
+  // Initialize a variable to keep track of the time left
+  let timeLeft = 0;
+
+  // Function to start the countdown timer
+  function startCountdown(exerciseDuration, countdownElement) {
+    timeLeft = exerciseDuration * 60; // Convert exercise duration to seconds
+    
+
+    function updateCountdown() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+
+      countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        countdownElement.textContent = "Time's up!";
+        // Optionally, you can add a notification or take some other action here.
+      }
+
+      timeLeft--;
+    }
+
+        // Clear the previous interval if it exists
+        clearInterval(countdownInterval);
+
+    // Update the countdown initially
+    updateCountdown();
+
+    // Start the countdown interval
+    countdownInterval = setInterval(updateCountdown, 1000);
+  }
+
+  // Get references to the "Start" buttons
+  const startButtons = document.querySelectorAll(".startButton");
+
+  // Add a click event listener to each "Start" button
+  startButtons.forEach(startButton => {
+    startButton.addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default button behavior
+      const exerciseDuration = parseFloat(this.getAttribute("data-exercise-duration"));
+      const countdownContainer = this.parentElement.querySelector(".countdown-container");
+      const countdownElement = countdownContainer.querySelector("#countdown");
+
+      // Show the countdown container
+      countdownContainer.style.display = "block";
+
+      // Start the countdown timer
+      startCountdown(exerciseDuration, countdownElement);
+    });
+  });
+
+      // Add a click event listener to each "Close Countdown" button
+      closeCountdownButtons.forEach(closeCountdownButton => {
+        closeCountdownButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            const countdownContainer = this.parentElement;
+            countdownContainer.style.display = "none";
+        });
+    });
+
+
+
+
+
+    // Get references to the "Stop," "Continue," and "Reset" buttons
+const stopButtons = document.querySelectorAll(".stopButton");
+const continueButtons = document.querySelectorAll(".continueButton");
+
+// Function to stop the countdown timer
+function stopCountdown() {
+    clearInterval(countdownInterval);
+}
+
+// Function to continue the countdown timer from the stop point
+function continueCountdown() {
+    const countdownElement = document.getElementById("countdown");
+    startCountdown(timeLeft / 60, countdownElement);
+}
+
+
+// Add click event listeners to the "Stop" buttons
+stopButtons.forEach(stopButton => {
+    stopButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        stopCountdown();
+    });
+});
+
+
+// Add click event listeners to the "Continue" buttons
+continueButtons.forEach(continueButton => {
+    continueButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        continueCountdown();
+    });
+});
+
+
+    </script>
+
+
+
+</body>
+</html>
